@@ -34,7 +34,7 @@ module OpenTelemetry
             "trace.span_id": span.span_id,
             "trace.trace_id": span.trace_id,
           }
-          if span.parent_span_id != ""
+          if span.parent_span_id != "" && span.parent_span_id != OpenTelemetry::Trace::INVALID_SPAN_ID
               spanData["trace.parent_id"] = span.parent_span_id
           end
           if !span.start_timestamp.nil? && !span.end_timestamp.nil?
