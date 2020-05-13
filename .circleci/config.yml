@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.5-stretch-node-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - bundle-v2-{{ checksum "Gemfile.lock" }}
+            - bundle-v2
+      - run:
+          name: Install bundler
+          command: gem install bundler
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - save_cache:
+          key: bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Run tests
+          command: bundle exec rake test
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
