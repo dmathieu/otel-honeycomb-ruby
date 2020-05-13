@@ -35,7 +35,7 @@ module OpenTelemetry
             "trace.trace_id": span.trace_id,
           }
           if span.parent_span_id != "" && span.parent_span_id != OpenTelemetry::Trace::INVALID_SPAN_ID
-              spanData["trace.parent_id"] = span.parent_span_id
+            spanData["trace.parent_id"] = span.parent_span_id
           end
           if !span.start_timestamp.nil? && !span.end_timestamp.nil?
             spanData["duration_ms"] = (span.end_timestamp - span.start_timestamp) * 1000
