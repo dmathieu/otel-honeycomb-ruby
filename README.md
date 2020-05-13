@@ -1,6 +1,6 @@
 # A Ruby OpenTelemetry Exporter for Honeycomb
 
-An unofficial Ruby OpenTelemetry exporter for Honeycomn
+An unofficial Ruby OpenTelemetry exporter for Honeycomb
 
 ## Setup
 
