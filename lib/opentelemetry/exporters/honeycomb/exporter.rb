@@ -14,13 +14,24 @@ module OpenTelemetry
           @shutdown = false
         end
 
-        def export(span_data)
+        def export(span_data, timeout: nil)
           return FAILURE if @shutdown
           span_data.each do |span|
             export_single(span)
           end unless span_data.nil?
           SUCCESS
         end
+
+        def force_flush(timeout: nil)
+          SUCCESS
+        end
+
+        def shutdown(timeout: nil)
+          @client.close(true)
+          @shutdown = true
+        end
+
+        private
 
         def export_single(span)
           ev = @client.event
@@ -79,11 +90,6 @@ module OpenTelemetry
           span.attributes.each do |k,v|
             event.add_field(k, v)
           end unless span.attributes.nil?
-        end
-
-        def shutdown
-          @client.close(true)
-          @shutdown = true
         end
       end
     end
