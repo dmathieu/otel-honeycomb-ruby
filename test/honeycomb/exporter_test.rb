@@ -53,7 +53,7 @@ describe OpenTelemetry::Exporters::Honeycomb::Exporter do
 
   def create_span_data(name: '', kind: :client, status: nil, parent_span_id: OpenTelemetry::Trace::INVALID_SPAN_ID,
                             total_recorded_attributes: 0, total_recorded_events: 0, total_recorded_links: 0,
-                            start_timestamp: Time.now, end_timestamp: Time.now + 1000,
+                            start_timestamp: Time.now.to_f * (10 ** 9), end_timestamp: Time.now.to_f * (10 ** 9) + 1000,
                             attributes: {}, links: [], events: [], resource: nil, instrumentation_library: nil,
                             span_id: OpenTelemetry::Trace.generate_span_id, trace_id: OpenTelemetry::Trace.generate_trace_id,
                             trace_flags: OpenTelemetry::Trace::TraceFlags::DEFAULT, tracestate: nil)
