@@ -6,9 +6,8 @@ module OpenTelemetry
     module Honeycomb
       class Exporter
         SUCCESS = OpenTelemetry::SDK::Trace::Export::SUCCESS
-        FAILED_RETRYABLE = OpenTelemetry::SDK::Trace::Export::FAILED_RETRYABLE
-        FAILED_NOT_RETRYABLE = OpenTelemetry::SDK::Trace::Export::FAILED_NOT_RETRYABLE
-        private_constant(:SUCCESS, :FAILED_RETRYABLE, :FAILED_NOT_RETRYABLE)
+        FAILURE = OpenTelemetry::SDK::Trace::Export::FAILURE
+        private_constant(:SUCCESS, :FAILURE)
 
         def initialize(writekey: nil, dataset: nil)
           @client = Libhoney::Client.new(writekey: writekey, dataset: dataset)
@@ -16,7 +15,7 @@ module OpenTelemetry
         end
 
         def export(span_data)
-          return FAILED_NOT_RETRYABLE if @shutdown
+          return FAILURE if @shutdown
           span_data.each do |span|
             export_single(span)
           end unless span_data.nil?
@@ -65,8 +64,8 @@ module OpenTelemetry
             linkEv.add({
               "trace.trace_id": span.trace_id,
               "trace.parent_id": span.trace_id,
-              "trace.link.trace_id": link.context.trace_id,
-              "trace.link.span_id": link.context.span_id,
+              "trace.link.trace_id": link.span_context.trace_id,
+              "trace.link.span_id": link.span_context.span_id,
               "meta.span_type": "link",
               "ref_type": 0,
             })
