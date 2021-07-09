@@ -37,14 +37,14 @@ module OpenTelemetry
           ev = @client.event
           add_attributes(ev, span)
 
-          ev.timestamp = span.start_timestamp
+          ev.timestamp = Time.at(0, span.start_timestamp, :nanosecond).utc
 
           spanData = {
             name: span.name,
             "trace.span_id": span.hex_span_id,
             "trace.trace_id": span.hex_trace_id,
           }
-          if span.hex_parent_span_id != "" && span.hex_parent_span_id != OpenTelemetry::Trace::INVALID_SPAN_ID
+          if span.hex_parent_span_id != "" && span.hex_parent_span_id != OpenTelemetry::Trace::INVALID_SPAN_ID.unpack1('H*')
             spanData["trace.parent_id"] = span.hex_parent_span_id
           end
           if !span.start_timestamp.nil? && !span.end_timestamp.nil?
