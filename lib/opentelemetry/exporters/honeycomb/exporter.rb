@@ -48,7 +48,7 @@ module OpenTelemetry
             spanData["trace.parent_id"] = span.hex_parent_span_id
           end
           if !span.start_timestamp.nil? && !span.end_timestamp.nil?
-            spanData["duration_ms"] = (span.end_timestamp - span.start_timestamp) * 1000
+            spanData["duration_ms"] = (span.end_timestamp - span.start_timestamp) / 1000000
           end
           ev.add(spanData)
 
